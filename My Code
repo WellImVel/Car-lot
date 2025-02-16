@@ -1,0 +1,107 @@
+using System;
+using System.Collections.Generic;
+using System.Text;
+
+namespace ParkingLotApp
+{
+    class Program
+    {
+        static List<string> parkingLot = new List<string>();
+
+        static void Main(string[] args)
+        {
+            Console.OutputEncoding = Encoding.UTF8;
+            Console.InputEncoding = Encoding.UTF8;
+            Console.WriteLine("🚗 Welcome to the parking lot!");
+            Console.WriteLine("🔹 Available commands: add [номер авто], remove [номер авто], list, exit");
+
+            while (true)
+            {
+                Console.Write("\n👉 Enter the command: ");
+                string input = Console.ReadLine()?.Trim();
+
+                if (string.IsNullOrEmpty(input)) 
+                {
+                    Console.WriteLine("⚠ The command cannot be empty.");
+                    continue;
+                }
+
+                string[] parts = input.Split(' ', 2);
+                string command = parts[0].ToLower();
+                string carNumber = parts.Length > 1 ? parts[1] : null;
+
+                switch (command)
+                {
+                    case "add":
+                        AddCar(carNumber);
+                        break;
+                    case "remove":
+                        RemoveCar(carNumber);
+                        break;
+                    case "list":
+                        ListCars();
+                        break;
+                    case "exit":
+                        Console.WriteLine("👋 Program shutdown.");
+                        return;
+                    default:
+                        Console.WriteLine("❌ Unknown command. Try again.");
+                        break;
+                }
+            }
+        }
+
+        static void AddCar(string carNumber)
+        {
+            if (string.IsNullOrWhiteSpace(carNumber))
+            {
+                Console.WriteLine("⚠ Enter the vehicle number.");
+                return;
+            }
+
+            if (!parkingLot.Contains(carNumber))
+            {
+                parkingLot.Add(carNumber);
+                Console.WriteLine($"✅ Car {carNumber} added to the parking lot."); 
+            }
+            else
+            {
+                Console.WriteLine($"ℹ Car {carNumber} is already in the parking lot."); 
+            }
+        }
+
+        static void RemoveCar(string carNumber)
+        {
+            if (string.IsNullOrWhiteSpace(carNumber))
+            {
+                Console.WriteLine("⚠ Enter the vehicle number.");
+                return;
+            }
+
+            if (parkingLot.Remove(carNumber))
+            {
+                Console.WriteLine($"✅ Car {carNumber} removed from parking lot."); 
+            }
+            else
+            {
+                Console.WriteLine($"❌ Car {carNumber} is not in the parking lot.");
+            }
+        }
+
+        static void ListCars()
+        {
+            if (parkingLot.Count > 0)
+            {
+                Console.WriteLine("\n📋 List of cars in the parking lot:");
+                foreach (string car in parkingLot)
+                {
+                    Console.WriteLine($"🚘 {car}");
+                }
+            }
+            else
+            {
+                Console.WriteLine("ℹ Empty parking.");
+            }
+        }
+    }
+}
